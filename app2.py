@@ -4,14 +4,15 @@ import pandas as pd
 
 # ------------------------- Load Models & Encoders -------------------------
 
+
 @st.cache_resource
 def load_models():
     """Loads the inpatient and outpatient models from pickle files."""
     try:
-        with open("inpatient_model.pkl", "rb") as f:
-            inpatient_model = pickle.load(f)
-        with open("outpatient_model.pkl", "rb") as f:
-            outpatient_model = pickle.load(f)
+        with gzip.open("inpatient_model.pkl.gz", "rb") as f:
+            inpatient_model = joblib.load(f)
+        with gzip.open("outpatient_model.pkl.gz", "rb") as f:
+            outpatient_model = joblib.load(f)
         return inpatient_model, outpatient_model
     except FileNotFoundError:
         st.error("❌ Model files not found. Please check the file paths.")
@@ -21,14 +22,14 @@ def load_models():
 def load_encoders():
     """Loads the label encoders for inpatient and outpatient services."""
     try:
-        with open("le_drg.pkl", "rb") as f:
-            inpatient_le_drg = pickle.load(f)
-        with open("le_state.pkl", "rb") as f:
-            inpatient_le_state = pickle.load(f)
-        with open("le_drg_outpatient.pkl", "rb") as f:
-            outpatient_le_apc = pickle.load(f)
-        with open("le_state_outpatient.pkl", "rb") as f:
-            outpatient_le_state = pickle.load(f)
+        with gzip.open("le_drg.pkl.gz", "rb") as f:
+            inpatient_le_drg = joblib.load(f)
+        with gzip.open("le_state.pkl.gz", "rb") as f:
+            inpatient_le_state = joblib.load(f)
+        with gzip.open("le_drg_outpatient.pkl.gz", "rb") as f:
+            outpatient_le_apc = joblib.load(f)
+        with gzip.open("le_state_outpatient.pkl.gz", "rb") as f:
+            outpatient_le_state = joblib.load(f)
         return inpatient_le_drg, inpatient_le_state, outpatient_le_apc, outpatient_le_state
     except FileNotFoundError:
         st.error("❌ Encoder files not found. Please check the file paths.")
